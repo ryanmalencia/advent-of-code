@@ -40,9 +40,10 @@
 # debug information files
 *.dwo
 **/input.txt
+*.txt
+*.log
 
 bin/
 obj/
 **/.vscode/
-*.log
 *.DS_Store
