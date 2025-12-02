@@ -9,7 +9,7 @@
 #include "../../include/string_utils.h"
 #include "../../include/timing.h"
 
-long long PartOne()
+size_t PartOne()
 {
     std::ifstream ifs;
     ifs.open("input.txt");
@@ -30,7 +30,7 @@ long long PartOne()
     }
 
     const auto id_ranges = string_utils::split_string(strLine, ",");
-    long long addedInvalidIds = 0;
+    size_t addedInvalidIds = 0;
     for(const auto& id_range : id_ranges)
     {
         const auto min_max_vec = string_utils::split_string(id_range, "-");
@@ -38,8 +38,8 @@ long long PartOne()
 
         const auto str_max = min_max_vec[1];
 
-        const long long min = std::stoll(str_min.c_str());
-        const long long max = std::stoll(str_max.c_str());
+        const size_t min = std::stoll(str_min.c_str());
+        const size_t max = std::stoll(str_max.c_str());
         if(logging::can_log())
         {
             std::stringstream ss;
@@ -53,7 +53,7 @@ long long PartOne()
             continue;
         }
 
-        for(long long i = min; i <= max; ++i)
+        for(size_t i = min; i <= max; ++i)
         {
             const std::string str = std::to_string(i);
             const auto len = str.length();
@@ -80,7 +80,7 @@ long long PartOne()
     return addedInvalidIds;
 }
 
-long long PartTwo()
+size_t PartTwo()
 {
     std::ifstream ifs;
     ifs.open("input.txt");
@@ -100,15 +100,15 @@ long long PartTwo()
         return 0;
     }
 
-    long long addedInvalidIds = 0;
+    size_t addedInvalidIds = 0;
     const auto id_ranges = string_utils::split_string(strLine, ",");
     for(const auto& id_range : id_ranges)
     {
         const auto min_max_vec = string_utils::split_string(id_range, "-");
         const auto str_min = min_max_vec[0];
         const auto str_max = min_max_vec[1];
-        const long long min = std::stoll(str_min.c_str());
-        const long long max = std::stoll(str_max.c_str());
+        const size_t min = std::stoll(str_min.c_str());
+        const size_t max = std::stoll(str_max.c_str());
         if(logging::can_log())
         {
             std::stringstream ss;
@@ -116,7 +116,7 @@ long long PartTwo()
             logging::log_message(ss.str().c_str());
         }
 
-        for(long long i = min; i <= max; ++i)
+        for(size_t i = min; i <= max; ++i)
         {
             const std::string str = std::to_string(i);
             const size_t len = str.length();
@@ -159,8 +159,8 @@ long long PartTwo()
 
 int main()
 {
-    long long partOne = PartOne();
-    long long partTwo = PartTwo();
+    size_t partOne = PartOne();
+    size_t partTwo = PartTwo();
     std::cout << "Part 1: " << partOne << std::endl;
     std::cout << "Part 2: " << partTwo << std::endl;
     return 0;
