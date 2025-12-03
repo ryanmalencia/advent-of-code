@@ -91,16 +91,12 @@ long long PartTwo()
     do
     {
         const char* str = strLine.c_str();
-        int min = 0;
-        int min_idx = 0;
-        int max = 0;
-        const int count = 12;
+        const size_t count = 12;
         std::array<int, count> values = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        int next_idx = 1;
         for(size_t i = 0; i < lineLength; ++i)
         {
             int val = ctoi(str[i]);
-            int j = i < (lineLength - count) ? 0 : count - (lineLength - i);
+            size_t j = i < (lineLength - count) ? 0 : count - (lineLength - i);
             for(; j < count; ++j)
             {
                 if(val > values[j])
@@ -111,11 +107,7 @@ long long PartTwo()
                 }
             }
 
-            if(i < (lineLength - count))
-            {
-                
-            }
-            else
+            if(i >= (lineLength - count))
             {
                 values[count - (lineLength - i)] = std::max(values[count - (lineLength - i)], val);
             }
