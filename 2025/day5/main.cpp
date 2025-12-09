@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <array>
 #include <chrono>
 #include <cstring>
@@ -95,51 +96,44 @@ size_t PartTwo()
         const auto range = string_utils::split_string(line, "-");
         size_t start = std::stoull(range[0]);
         size_t end = std::stoull(range[1]);
-        bool found_range = false;
-        for(auto& range: fresh_ranges)
+
+        fresh_ranges.push_back({start, end});
+
+    }
+
+    std::sort(fresh_ranges.begin(), fresh_ranges.end(), [](const auto& a, const auto& b) {
+        return a.first < b.first;
+    });
+
+    size_t curr_idx = 0;
+    std::pair<size_t, size_t> current_range = fresh_ranges[curr_idx];
+    for(size_t i = 0; i < fresh_ranges.size() - 1; ++i)
+    {
+        std::pair<size_t, size_t>& next_range = fresh_ranges[i + 1];
+        if(current_range.second >= (next_range.first-1))
         {
-            if(start < range.first && (end >= range.first && end <= range.second))
-            {
-                std::cout << "Extending range " << range.first << "-" << range.second << " to " << start << "-" << range.second << std::endl;
-                range.first = start;
-                found_range = true;
-                break;
-            }
-            else if(start >= range.first && start <= range.second && end > range.second)
-            {
-                std::cout << "Extending range " << range.first << "-" << range.second << " to " << range.first << "-" << end << std::endl;
-                range.second = end;
-                found_range = true;
-                break;
-            }
-            else if(start <= range.first && end >= range.second)
-            {
-                std::cout << "Extending range " << range.first << "-" << range.second << " to " << start << "-" << end << std::endl;
-                range.first = start;
-                range.second = end;
-                found_range = true;
-                break;
-            }
-            else if(start >= range.first && end <= range.second)
-            {
-                std::cout << "Range " << start << "-" << end << " is contained within " << range.first << "-" << range.second << std::endl;
-                found_range = true;
-                break;
-            }
+            fresh_ranges[curr_idx].second = std::max(current_range.second, next_range.second);
+            next_range.first = 0;
+            next_range.second = 0;
+            current_range = fresh_ranges[curr_idx];
         }
-        if(!found_range)
+        else
         {
-            fresh_ranges.push_back({start, end});
-            std::cout << "Added new range: " << start << "-" << end << std::endl;
+            curr_idx = i + 1;
+            current_range = fresh_ranges[curr_idx];
         }
     }
 
     size_t fresh_ingredients = 0;
     for(const auto& range: fresh_ranges)
     {
+        if(range.first == 0 && range.second == 0)
+        {
+            continue;
+        }
+        
         size_t count = (range.second - range.first + 1);
         fresh_ingredients += count;
-        std::cout << "Range " << range.first << "-" << range.second << " has " << count << " fresh ingredients" << " for a total of " << fresh_ingredients << std::endl;
     }
 
     END_TIMER(PartTwo);
